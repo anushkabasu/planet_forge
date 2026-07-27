@@ -1,53 +1,64 @@
-<!doctype html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Planet Forge!</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="style.css">
-    </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planet Forge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    <body>
-        <div class="stars-layer"></div>
+  <div class="stars-layer"></div>
 
-        <header class="app-header">
-            <h1 class="app-title">Planet Forge!</h1>
-            <p class="app-subtitle">Design worlds, one layer at a time :D</p>
-        </header>
+  <header class="app-header">
+    <h1 class="app-title">Planet Forge</h1>
+    <p class="app-subtitle">Design worlds, one feature at a time!</p>
+  </header>
 
-        <main class="panel sidebar-left">
-            <aside class="panel-title">
-                <h2 class="panel-title">Controls</h2>
-                <p class="placeholder-text">Customization tools for shaping your planet, terrain, atmosphere, and much more, will appear here in a future update!</p>
-            </aside>
+  <main class="app-layout">
 
-            <section class="panel preview -panel">
-                <h2 class="panel-title">Planet Preview</h2>
-                <div class="preview-stage">
-                    <div class="preview-stars">
-                        <span class="star"></span>
-                        <span class="star"></span>
-                        <span class="star"></span>
-                        <span class="star"></span>
-                        <span class="star"></span>
-                        <span class="star"></span>
-                        <span class="star"></span>
-                        <span class="star"></span>
-                    </div>
-                    <div class="planet"></div>
-                </div>
-            </section>
+    <aside class="panel sidebar-left">
+      <h2 class="panel-title">Controls</h2>
 
-            <aside class="panel sidebar-right">
-                <h2 class="panel-title">Planet Information</h2>
-                <p class="placeholder-text">Scientific reports and planet stats will be generated in a future update.</p>
-            </aside>
+      <div class="control-group">
+        <label for="size-slider">Planet Size</label>
+        <input type="range" id="size-slider" min="100" max="300" value="220">
+      </div>
 
-        </main>
+      <div class="control-group">
+        <label for="color-picker">Planet Color</label>
+        <input type="color" id="color-picker" value="#5b8cff">
+      </div>
 
-        <script src="script.js"></script>
-        
-    </body>
+      <p class="placeholder-text">Customization tools, such as terrain and atmosphere controls, will be in future updates!</p>
+    </aside>
+
+    <section class="panel preview-panel">
+      <h2 class="panel-title">Planet Preview</h2>
+      <div class="preview-stage">
+        <div class="preview-stars">
+          <span class="star"></span>
+          <span class="star"></span>
+          <span class="star"></span>
+          <span class="star"></span>
+          <span class="star"></span>
+          <span class="star"></span>
+          <span class="star"></span>
+          <span class="star"></span>
+        </div>
+        <div class="planet" id="planet"></div>
+      </div>
+    </section>
+
+    <aside class="panel sidebar-right">
+      <h2 class="panel-title">Planet Information</h2>
+      <p class="placeholder-text">Wait for future updates!</p>
+    </aside>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
 </html>
