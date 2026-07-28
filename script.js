@@ -32,6 +32,12 @@ const cardDescription = document.getElementById('card-description');
 const randomBtn = document.getElementById('random-btn');
 const scanOverlay = document.getElementById('scan-overlay');
 
+const saveBtn = document.getElementById('save-btn');
+const archiveGrid = document.getElementById('archive-grid');
+const ARCHIVE_STORAGE_KEY = 'planetForgeArchive';
+
+let currentPlanetData = null;
+
 function shadeColor(hex, percent) {
   let num = parseInt(hex.replace('#', ''), 16);
   let r = (num >> 16) + Math.round(255 * (percent / 100));
@@ -290,7 +296,7 @@ function updatePlanetInfo() {
   infoAtmosphere.textContent = atmosphereType;
   infoHabitability.textContent = habitability;
 
-  updatePlanetCard({
+  const planetData = {
     name,
     type,
     gravity,
@@ -300,7 +306,17 @@ function updatePlanetInfo() {
     moonCount,
     rarity,
     description
-  });
+  };
+
+  updatePlanetCard(planetData);
+
+  currentPlanetData = {
+    ...planetData,
+    color: colorPicker.value,
+    size,
+    ringsEnabled: ringToggle.checked,
+    atmosphereEnabled: hasAtmosphere
+  };
 }
 
 function randomInRange(min, max) {
@@ -346,6 +362,83 @@ function playGenerateAnimation() {
 
 randomBtn.addEventListener('click', playGenerateAnimation);
 
+function getSavedPlanets() {
+  const stored = localStorage.getItem(ARCHIVE_STORAGE_KEY);
+  return stored ? JSON.parse(stored) : [];
+}
+
+function setSavedPlanets(planets) {
+  localStorage.setItem(ARCHIVE_STORAGE_KEY, JSON.stringify(planets));
+}
+
+function savePlanet() {
+  if (!currentPlanetData) return;
+
+  const savedPlanets = getSavedPlanets();
+
+  const entry = {
+    id: Date.now(),
+    savedAt: new Date().toLocaleDateString(),
+    ...currentPlanetData
+  };
+
+  savedPlanets.push(entry);
+  setSavedPlanets(savedPlanets);
+  loadArchive();
+}
+
+function deletePlanet(id) {
+  const savedPlanets = getSavedPlanets().filter(p => p.id !== id);
+  setSavedPlanets(savedPlanets);
+  loadArchive();
+}
+
+function createArchiveCard(entry) {
+  const card = document.createElement('div');
+  card.className = 'archive-card';
+
+  card.innerHTML = `
+    <div class="archive-card-header">
+      <span class="archive-color-preview" style="background: ${entry.color}"></span>
+      <span class="archive-name">${entry.name}</span>
+    </div>
+    <div class="archive-row">
+      <span>Type</span>
+      <span>${entry.type}</span>
+    </div>
+    <div class="archive-row">
+      <span>Rarity</span>
+      <span>${entry.rarity}</span>
+    </div>
+    <div class="archive-date">Saved on ${entry.savedAt}</div>
+    <button class="archive-delete-btn">Delete</button>
+  `;
+
+  const deleteBtn = card.querySelector('.archive-delete-btn');
+  deleteBtn.addEventListener('click', () => deletePlanet(entry.id));
+
+  return card;
+}
+
+function loadArchive() {
+  const savedPlanets = getSavedPlanets();
+  archiveGrid.innerHTML = '';
+
+  if (savedPlanets.length === 0) {
+    const emptyMessage = document.createElement('p');
+    emptyMessage.className = 'archive-empty';
+    emptyMessage.textContent = 'No planets saved yet.';
+    archiveGrid.appendChild(emptyMessage);
+    return;
+  }
+
+  savedPlanets.forEach(entry => {
+    archiveGrid.appendChild(createArchiveCard(entry));
+  });
+}
+
+saveBtn.addEventListener('click', savePlanet);
+
 sizeSlider.addEventListener('input', () => {
   updatePlanetSize(sizeSlider.value);
   updatePlanetInfo();
@@ -377,3 +470,5 @@ updateAtmosphere(atmosphereToggle.checked);
 updateRingVisibility(ringToggle.checked);
 updateMoonCount(Number(moonSlider.value));
 updatePlanetInfo();
+
+loadArchive();
