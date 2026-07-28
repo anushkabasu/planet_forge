@@ -29,6 +29,9 @@ const cardHabitability = document.getElementById('card-habitability');
 const cardMoons = document.getElementById('card-moons');
 const cardDescription = document.getElementById('card-description');
 
+const randomBtn = document.getElementById('random-btn');
+const scanOverlay = document.getElementById('scan-overlay');
+
 function shadeColor(hex, percent) {
   let num = parseInt(hex.replace('#', ''), 16);
   let r = (num >> 16) + Math.round(255 * (percent / 100));
@@ -208,11 +211,11 @@ function calculateHabitability(gravity, temperature, atmosphereType) {
 
 function generateRarity() {
   const rarities = [
-    { name: 'Common', weight: 40},
-    { name: 'Uncommon', weight: 30},
-    { name: 'Rare', weight: 20},
-    { name: 'Epic', weight: 8},
-    { name: 'Legendary', weight: 2}
+    { name: 'Common', weight: 40 },
+    { name: 'Uncommon', weight: 30 },
+    { name: 'Rare', weight: 20 },
+    { name: 'Epic', weight: 8 },
+    { name: 'Legendary', weight: 2 }
   ];
 
   const totalWeight = rarities.reduce((sum, r) => sum + r.weight, 0);
@@ -269,6 +272,7 @@ function updatePlanetInfo() {
   const size = Number(sizeSlider.value);
   const hue = getHue(colorPicker.value);
   const hasAtmosphere = atmosphereToggle.checked;
+  const moonCount = Number(moonSlider.value);
 
   const name = generatePlanetName();
   const type = determinePlanetType(size, hue);
@@ -276,8 +280,6 @@ function updatePlanetInfo() {
   const temperature = calculateTemperature(hue);
   const atmosphereType = determineAtmosphereType(hasAtmosphere);
   const habitability = calculateHabitability(Number(gravity), temperature, atmosphereType);
-
-  const moonCount = Number(moonSlider.value);
   const rarity = generateRarity();
   const description = generatePlanetDescription(type, atmosphereType, habitability, temperature);
 
@@ -300,6 +302,49 @@ function updatePlanetInfo() {
     description
   });
 }
+
+function randomInRange(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomHexColor() {
+  const r = randomInRange(0, 255).toString(16).padStart(2, '0');
+  const g = randomInRange(0, 255).toString(16).padStart(2, '0');
+  const b = randomInRange(0, 255).toString(16).padStart(2, '0');
+  return `#${r}${g}${b}`;
+}
+
+function generateRandomPlanet() {
+  const randomSize = randomInRange(100, 300);
+  const randomColor = randomHexColor();
+  const randomAtmosphere = Math.random() < 0.5;
+  const randomRings = Math.random() < 0.5;
+  const randomMoons = randomInRange(0, 3);
+
+  sizeSlider.value = randomSize;
+  colorPicker.value = randomColor;
+  atmosphereToggle.checked = randomAtmosphere;
+  ringToggle.checked = randomRings;
+  moonSlider.value = randomMoons;
+
+  updatePlanetSize(randomSize);
+  updatePlanetColor(randomColor);
+  updateAtmosphere(randomAtmosphere);
+  updateRingVisibility(randomRings);
+  updateMoonCount(randomMoons);
+  updatePlanetInfo();
+}
+
+function playGenerateAnimation() {
+  scanOverlay.classList.add('active');
+
+  setTimeout(() => {
+    generateRandomPlanet();
+    scanOverlay.classList.remove('active');
+  }, 400);
+}
+
+randomBtn.addEventListener('click', playGenerateAnimation);
 
 sizeSlider.addEventListener('input', () => {
   updatePlanetSize(sizeSlider.value);

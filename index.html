@@ -22,6 +22,8 @@
     <aside class="panel sidebar-left">
       <h2 class="panel-title">Controls</h2>
 
+      <button class="random-btn" id="random-btn">Generate Random Planet</button>
+
       <div class="control-group">
         <label for="size-slider">Planet Size</label>
         <input type="range" id="size-slider" min="100" max="300" value="220">
@@ -52,7 +54,7 @@
 
     <section class="panel preview-panel">
       <h2 class="panel-title">Planet Preview</h2>
-      <div class="preview-stage">
+      <div class="preview-stage" id="preview-stage">
         <div class="preview-stars">
           <span class="star"></span>
           <span class="star"></span>
@@ -71,12 +73,14 @@
           <div class="moon" id="moon-2"></div>
           <div class="moon" id="moon-3"></div>
         </div>
+
+        <div class="scan-overlay" id="scan-overlay"></div>
       </div>
     </section>
 
     <aside class="panel sidebar-right">
       <h2 class="panel-title">Planet Information</h2>
-      
+
       <div class="info-row">
         <span class="info-label">Name</span>
         <span class="info-value" id="info-name">-</span>
@@ -94,7 +98,7 @@
 
       <div class="info-row">
         <span class="info-label">Average Temperature</span>
-        <span class="info-value" id="info-atmosphere">-</span>
+        <span class="info-value" id="info-temperature">-</span>
       </div>
 
       <div class="info-row">

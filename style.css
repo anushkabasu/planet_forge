@@ -107,6 +107,31 @@ body {
   margin-top: 1.2rem;
 }
 
+.random-btn {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  margin-bottom: 1.4rem;
+  background: var(--bg-page);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.random-btn:hover {
+  background: rgba(79, 209, 255, 0.1);
+}
+
+.random-btn:active {
+  transform: scale(0.96);
+}
+
 .control-group {
   margin-bottom: 1.4rem;
 }
@@ -234,8 +259,8 @@ body {
   border-radius: 50%;
   background: radial-gradient(circle at 32% 28%, var(--planet-light) 0%, var(--planet-mid) 45%, var(--planet-dark) 100%);
   overflow: hidden;
-  z-index:2;
-  transition: width 0.3s ease, height 0.3s ease;
+  z-index: 2;
+  transition: width 0.3s ease, height 0.3s ease, box-shadow 0.3s ease;
 }
 
 .planet::before {
@@ -283,6 +308,22 @@ body {
 
 .moon.active {
   display: block;
+}
+
+.scan-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(79, 209, 255, 0.06);
+  border-top: 1px solid rgba(79, 209, 255, 0.4);
+  border-bottom: 1px solid rgba(79, 209, 255, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  transition: opacity 0.15s ease;
+}
+
+.scan-overlay.active {
+  opacity: 1;
 }
 
 .card-section {
@@ -380,5 +421,9 @@ body {
   .preview-panel {
     order: -1;
     min-height: 360px;
+  }
+
+  .planet-card {
+    max-width: 100%;
   }
 }
