@@ -32,6 +32,21 @@
         <input type="color" id="color-picker" value="#5b8cff">
       </div>
 
+      <div class="control-group">
+        <label for="atmosphere-toggle">Atmosphere</label>
+        <input type="checkbox" id="atmosphere-toggle">
+      </div>
+
+      <div class="control-group">
+        <label for="ring-toggle">Rings</label>
+        <input type="checkbox" id="ring-toggle">
+      </div>
+
+      <div class="control-group">
+        <label for="moon-slider">Moons</label>
+        <input type="range" id="moon-slider" min="0" max="3" value="0" step="1">
+      </div>
+
       <p class="placeholder-text">Customization tools, such as terrain and atmosphere controls, will be in future updates!</p>
     </aside>
 
@@ -48,7 +63,14 @@
           <span class="star"></span>
           <span class="star"></span>
         </div>
-        <div class="planet" id="planet"></div>
+
+        <div class="planet-system" id="planet-system">
+          <div class="ring" id="ring"></div>
+          <div class="planet" id="planet"></div>
+          <div class="moon" id="moon-1"></div>
+          <div class="moon" id="moon-2"></div>
+          <div class="moon" id="moon-3"></div>
+        </div>
       </div>
     </section>
 
