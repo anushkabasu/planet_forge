@@ -104,6 +104,7 @@ body {
   color: var(--text-muted);
   font-size: 0.85rem;
   line-height: 1.55;
+  margin-top: 1.2rem;
 }
 
 .control-group {
@@ -139,6 +140,32 @@ body {
   height: 18px;
   accent-color: var(--accent);
   cursor: pointer;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.info-row:last-of-type {
+  border-bottom: none;
+}
+
+.info-label {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.info-value {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: right;
 }
 
 .preview-panel {

@@ -2,7 +2,7 @@ const sizeSlider = document.getElementById('size-slider');
 const colorPicker = document.getElementById('color-picker');
 const atmosphereToggle = document.getElementById('atmosphere-toggle');
 const ringToggle = document.getElementById('ring-toggle');
-const moonslider = document.getElementById('moon-slider');
+const moonSlider = document.getElementById('moon-slider');
 
 const planet = document.getElementById('planet');
 const ring = document.getElementById('ring');
@@ -10,7 +10,14 @@ const moons = [
   document.getElementById('moon-1'),
   document.getElementById('moon-2'),
   document.getElementById('moon-3')
-]
+];
+
+const infoName = document.getElementById('info-name');
+const infoType = document.getElementById('info-type');
+const infoGravity = document.getElementById('info-gravity');
+const infoTemperature = document.getElementById('info-temperature');
+const infoAtmosphere = document.getElementById('info-atmosphere');
+const infoHabitability = document.getElementById('info-habitability');
 
 function shadeColor(hex, percent) {
   let num = parseInt(hex.replace('#', ''), 16);
@@ -30,7 +37,7 @@ function hexToRgba(hex, alpha) {
   const r = (num >> 16) & 0xFF;
   const g = (num >> 8) & 0xFF;
   const b = num & 0xFF;
-  return 'rgba(${r}, ${g}, ${b}, ${alpha}';
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
 function updatePlanetColor(hex) {
@@ -41,7 +48,7 @@ function updatePlanetColor(hex) {
   planet.style.setProperty('--planet-light', lightShade);
   planet.style.setProperty('--planet-mid', hex);
   planet.style.setProperty('--planet-dark', darkShade);
-  planet.style.setProperty('--planet-glow', glowColor)
+  planet.style.setProperty('--planet-glow', glowColor);
 }
 
 function updatePlanetSize(size) {
@@ -53,7 +60,7 @@ function updatePlanetSize(size) {
 }
 
 function updateAtmosphere(isEnabled) {
-  planet.classList.toggle('atmosphere-on', inEnabled);
+  planet.classList.toggle('atmosphere-on', isEnabled);
 }
 
 function updateRingSize(planetSize) {
@@ -89,28 +96,151 @@ function updateMoonCount(count) {
   });
 }
 
+function getHue(hex) {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = ((num >> 16) & 0xFF) / 255;
+  const g = ((num >> 8) & 0xFF) / 255;
+  const b = (num & 0xFF) / 255;
+
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const delta = max - min;
+
+  if (delta === 0) return 0;
+
+  let hue;
+  if (max === r) hue = ((g - b) / delta) % 6;
+  else if (max === g) hue = (b - r) / delta + 2;
+  else hue = (r - g) / delta + 4;
+
+  hue *= 60;
+  if (hue < 0) hue += 360;
+
+  return hue;
+}
+
+function generatePlanetName() {
+  const words = ['Astera', 'Nyx', 'Helion', 'Vesper', 'Orion', 'Thalos', 'Kryos', 'Zeta', 'Auron', 'Lyra', 'Corvus', 'Draken', 'Ignis', 'Tessera'];
+  const suffixes = ['Prime', 'Major', 'Minor', 'IX', 'VII', 'X', 'II'];
+
+  const word = words[Math.floor(Math.random() * words.length)];
+  const pattern = Math.floor(Math.random() * 3);
+
+  if (pattern === 0) {
+    const number = Math.floor(Math.random() * 9) + 1;
+    return `${word}-${number}`;
+  }
+
+  if (pattern === 1) {
+    const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+    return `${word} ${suffix}`;
+  }
+
+  return word;
+}
+
+function determinePlanetType(size, hue) {
+  if (size > 260) return 'Gas Giant';
+
+  if (hue < 30 || hue >= 330) return 'Volcanic World';
+  if (hue < 60) return 'Desert Planet';
+  if (hue < 160) return 'Rocky Planet';
+  if (hue < 200) return 'Ice World';
+  if (hue < 260) return 'Ocean World';
+
+  return 'Rocky Planet';
+}
+
+function calculateGravity(size) {
+  const minGravity = 0.5;
+  const maxGravity = 2.2;
+  const sizeRatio = (size - 100) / (300 - 100);
+
+  let gravity = minGravity + sizeRatio * (maxGravity - minGravity);
+  gravity += Math.random() * 0.2 - 0.1;
+
+  return Math.max(0.1, gravity).toFixed(2);
+}
+
+function calculateTemperature(hue) {
+  let baseTemp;
+
+  if (hue < 40 || hue >= 320) baseTemp = 80;
+  else if (hue < 70) baseTemp = 45;
+  else if (hue < 160) baseTemp = 15;
+  else if (hue < 200) baseTemp = -10;
+  else if (hue < 260) baseTemp = -40;
+  else baseTemp = 10;
+
+  const variation = Math.random() * 20 - 10;
+  return Math.round(baseTemp + variation);
+}
+
+function determineAtmosphereType(hasAtmosphere) {
+  if (!hasAtmosphere) return 'None';
+
+  const gasTypes = ['Nitrogen-Oxygen', 'Carbon Dioxide', 'Methane', 'Hydrogen', 'Helium'];
+  return gasTypes[Math.floor(Math.random() * gasTypes.length)];
+}
+
+function calculateHabitability(gravity, temperature, atmosphereType) {
+  if (atmosphereType === 'None') return 'Uninhabitable';
+
+  const gravityOk = gravity >= 0.7 && gravity <= 1.4;
+  const temperatureOk = temperature >= -10 && temperature <= 35;
+
+  if (gravityOk && temperatureOk && atmosphereType === 'Nitrogen-Oxygen') return 'High';
+  if (gravityOk && temperatureOk) return 'Moderate';
+  if (gravityOk || temperatureOk) return 'Low';
+
+  return 'Uninhabitable';
+}
+function updatePlanetInfo() {
+  const size = Number(sizeSlider.value);
+  const hue = getHue(colorPicker.value);
+  const hasAtmosphere = atmosphereToggle.checked;
+
+  const gravity = calculateGravity(size);
+  const temperature = calculateTemperature(hue);
+  const atmosphereType = determineAtmosphereType(hasAtmosphere);
+  const habitability = calculateHabitability(Number(gravity), temperature, atmosphereType);
+
+  infoName.textContent = generatePlanetName();
+  infoType.textContent = determinePlanetType(size, hue);
+  infoGravity.textContent = `${gravity} g`;
+  infoTemperature.textContent = `${temperature}°C`;
+  infoAtmosphere.textContent = atmosphereType;
+  infoHabitability.textContent = habitability;
+}
+
 sizeSlider.addEventListener('input', () => {
   updatePlanetSize(sizeSlider.value);
+  updatePlanetInfo();
 });
 
 colorPicker.addEventListener('input', () => {
   updatePlanetColor(colorPicker.value);
+  updatePlanetInfo();
 });
 
 atmosphereToggle.addEventListener('change', () => {
   updateAtmosphere(atmosphereToggle.checked);
+  updatePlanetInfo();
 });
 
 ringToggle.addEventListener('change', () => {
   updateRingVisibility(ringToggle.checked);
+  updatePlanetInfo();
 });
 
 moonSlider.addEventListener('input', () => {
   updateMoonCount(Number(moonSlider.value));
+  updatePlanetInfo();
 });
 
 updatePlanetSize(sizeSlider.value);
 updatePlanetColor(colorPicker.value);
 updateAtmosphere(atmosphereToggle.checked);
 updateRingVisibility(ringToggle.checked);
-updateMoonCount(Number(moonSlider.value))
+updateMoonCount(Number(moonSlider.value));
+updatePlanetInfo();
