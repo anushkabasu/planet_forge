@@ -285,6 +285,93 @@ body {
   display: block;
 }
 
+.card-section {
+  position: relative;
+  z-index: 1;
+  padding: 0 1.6rem 2.4rem;
+}
+
+.card-section .panel-title {
+  margin-bottom: 1rem;
+}
+
+.planet-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 1.4rem 1.3rem;
+  max-width: 420px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.8rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.card-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.card-rarity {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: 3px;
+  border: 1px solid currentColor;
+}
+
+.card-rarity.rarity-common { color: #9aa0ab; }
+.card-rarity.rarity-uncommon { color: #7bd88f; }
+.card-rarity.rarity-rare { color: #63b3ff; }
+.card-rarity.rarity-epic { color: #b98aff; }
+.card-rarity.rarity-legendary { color: #ffd166; }
+
+.card-body {
+  margin-bottom: 1rem;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.card-row:last-of-type {
+  border-bottom: none;
+}
+
+.card-label {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.card-value {
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: right;
+}
+
+.card-description {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
 @media (max-width: 900px) {
   .app-layout {
     grid-template-columns: 1fr;

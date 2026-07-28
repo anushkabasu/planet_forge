@@ -19,6 +19,16 @@ const infoTemperature = document.getElementById('info-temperature');
 const infoAtmosphere = document.getElementById('info-atmosphere');
 const infoHabitability = document.getElementById('info-habitability');
 
+const cardName = document.getElementById('card-name');
+const cardRarity = document.getElementById('card-rarity');
+const cardType = document.getElementById('card-type');
+const cardGravity = document.getElementById('card-gravity');
+const cardTemperature = document.getElementById('card-temperature');
+const cardAtmosphere = document.getElementById('card-atmosphere');
+const cardHabitability = document.getElementById('card-habitability');
+const cardMoons = document.getElementById('card-moons');
+const cardDescription = document.getElementById('card-description');
+
 function shadeColor(hex, percent) {
   let num = parseInt(hex.replace('#', ''), 16);
   let r = (num >> 16) + Math.round(255 * (percent / 100));
@@ -195,22 +205,100 @@ function calculateHabitability(gravity, temperature, atmosphereType) {
 
   return 'Uninhabitable';
 }
+
+function generateRarity() {
+  const rarities = [
+    { name: 'Common', weight: 40},
+    { name: 'Uncommon', weight: 30},
+    { name: 'Rare', weight: 20},
+    { name: 'Epic', weight: 8},
+    { name: 'Legendary', weight: 2}
+  ];
+
+  const totalWeight = rarities.reduce((sum, r) => sum + r.weight, 0);
+  let roll = Math.random() * totalWeight;
+
+  for (const rarity of rarities) {
+    if (roll < rarity.weight) return rarity.name;
+    roll -= rarity.weight;
+  }
+
+  return 'Common';
+}
+
+function generatePlanetDescription(type, atmosphereType, habitability, temperature) {
+  const tempWord = temperature < -10 ? 'frozen' : temperature > 40 ? 'scorching' : 'temperate';
+  const atmosphereWord = atmosphereType === 'None' ? 'no atmosphere' : `a ${atmosphereType.toLowerCase()} atmosphere`;
+
+  const templates = {
+    'Gas Giant': `A massive gas giant wrapped in swirling clouds and ${atmosphereWord}.`,
+    'Volcanic World': `A ${tempWord} volcanic planet covered in molten plains and intense geological activity.`,
+    'Desert Planet': `A ${tempWord} desert world with vast dry plains and ${atmosphereWord}.`,
+    'Rocky Planet': `A rocky planet with ${atmosphereWord} and generally stable conditions.`,
+    'Ice World': `A ${tempWord} world locked in ice, with ${atmosphereWord}.`,
+    'Ocean World': `An ocean-covered planet with ${atmosphereWord} and a mostly stable climate.`
+  };
+
+  let description = templates[type] || `A ${tempWord} planet with ${atmosphereWord}.`;
+
+  if (habitability === 'High') {
+    description += ' Conditions here could support life.';
+  } else if (habitability === 'Uninhabitable') {
+    description += ' Conditions are hostile to life as we know it.';
+  }
+
+  return description;
+}
+
+function updatePlanetCard(data) {
+  cardName.textContent = data.name;
+  cardType.textContent = data.type;
+  cardGravity.textContent = `${data.gravity} g`;
+  cardTemperature.textContent = `${data.temperature}°C`;
+  cardAtmosphere.textContent = data.atmosphereType;
+  cardHabitability.textContent = data.habitability;
+  cardMoons.textContent = data.moonCount;
+  cardDescription.textContent = data.description;
+
+  cardRarity.className = 'card-rarity';
+  cardRarity.classList.add(`rarity-${data.rarity.toLowerCase()}`);
+  cardRarity.textContent = data.rarity;
+}
+
 function updatePlanetInfo() {
   const size = Number(sizeSlider.value);
   const hue = getHue(colorPicker.value);
   const hasAtmosphere = atmosphereToggle.checked;
 
+  const name = generatePlanetName();
+  const type = determinePlanetType(size, hue);
   const gravity = calculateGravity(size);
   const temperature = calculateTemperature(hue);
   const atmosphereType = determineAtmosphereType(hasAtmosphere);
   const habitability = calculateHabitability(Number(gravity), temperature, atmosphereType);
 
-  infoName.textContent = generatePlanetName();
-  infoType.textContent = determinePlanetType(size, hue);
+  const moonCount = Number(moonSlider.value);
+  const rarity = generateRarity();
+  const description = generatePlanetDescription(type, atmosphereType, habitability, temperature);
+
+  infoName.textContent = name;
+  infoType.textContent = type;
   infoGravity.textContent = `${gravity} g`;
   infoTemperature.textContent = `${temperature}°C`;
   infoAtmosphere.textContent = atmosphereType;
   infoHabitability.textContent = habitability;
+
+  updatePlanetCard({
+    name,
+    type,
+    gravity,
+    temperature,
+    atmosphereType,
+    habitability,
+    moonCount,
+    rarity,
+    description
+  });
 }
 
 sizeSlider.addEventListener('input', () => {
