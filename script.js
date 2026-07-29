@@ -411,10 +411,12 @@ function createArchiveCard(entry) {
       <span>${entry.rarity}</span>
     </div>
     <div class="archive-date">Saved on ${entry.savedAt}</div>
-    <button class="archive-delete-btn">Delete</button>
+    <button class="archive-delete-btn"></button>
   `;
 
   const deleteBtn = card.querySelector('.archive-delete-btn');
+  deleteBtn.textContent = 'Delete';
+  deleteBtn.setAttribute('aria-label', `Delete ${entry.name}`);
   deleteBtn.addEventListener('click', () => deletePlanet(entry.id));
 
   return card;
@@ -470,5 +472,4 @@ updateAtmosphere(atmosphereToggle.checked);
 updateRingVisibility(ringToggle.checked);
 updateMoonCount(Number(moonSlider.value));
 updatePlanetInfo();
-
 loadArchive();

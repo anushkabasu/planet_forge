@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -13,8 +13,8 @@
   <div class="stars-layer"></div>
 
   <header class="app-header">
-    <h1 class="app-title">planet forge!</h1>
-    <p class="app-subtitle">design worlds, one feature at a time!</p>
+    <h1 class="app-title">Planet Forge</h1>
+    <p class="app-subtitle">Design worlds, one feature at a time!</p>
   </header>
 
   <main class="app-layout">
@@ -22,7 +22,7 @@
     <aside class="panel sidebar-left">
       <h2 class="panel-title">Controls</h2>
 
-      <button class="random-btn" id="random-btn">generate random planet</button>
+      <button class="btn random-btn" id="random-btn">Generate Random Planet</button>
 
       <div class="control-group">
         <label for="size-slider">Planet Size</label>
@@ -49,12 +49,12 @@
         <input type="range" id="moon-slider" min="0" max="3" value="0" step="1">
       </div>
 
-      <p class="placeholder-text">customization tools, such as terrain and atmosphere controls, will be in future updates!</p>
+      <p class="placeholder-text">Customization tools, such as terrain and atmosphere controls, will be in future updates!</p>
     </aside>
 
     <section class="panel preview-panel">
       <h2 class="panel-title">Planet Preview</h2>
-      <div class="preview-stage" id="preview-stage">
+      <div class="preview-stage">
         <div class="preview-stars">
           <span class="star"></span>
           <span class="star"></span>
@@ -78,7 +78,7 @@
       </div>
     </section>
 
-    <aside class="panel sidebar-right">
+    <aside class="panel sidebar-right" aria-live="polite">
       <h2 class="panel-title">Planet Information</h2>
 
       <div class="info-row">
@@ -111,7 +111,7 @@
         <span class="info-value" id="info-habitability">-</span>
       </div>
 
-      <p class="placeholder-text">wait for future updates!</p>
+      <p class="placeholder-text">Wait for future updates!</p>
     </aside>
 
   </main>
@@ -155,8 +155,7 @@
       <p class="card-description" id="card-description">-</p>
     </div>
 
-    <button class="save-btn" id="save-btn">Save Planet</button>
-
+    <button class="btn save-btn" id="save-btn">Save Planet</button>
   </section>
 
   <section class="archive-section">
